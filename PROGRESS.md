@@ -80,6 +80,31 @@ value is now e.g. `Medium (21 – 40 lb)`. `FP_SIZE()` still resolves bookings t
 under the old four-tier form (Large and X-Large both map to Big), so the test
 booking and any early ones still price correctly in the dashboard.
 
+**Git + GitHub — started 11 September 2026**
+
+This folder is now a real git repository.
+
+- `git init` on branch `main`, `.gitignore` added (OS junk, editor files,
+  `node_modules`, any `.env`). `.gitkeep` files keep `assets/feed/` and
+  `assets/gallery/` in git while they're empty — the Facebook sync workflow
+  writes into `assets/feed/`.
+- One commit, `20a7f06`, 27 files, working tree clean.
+- Remote `origin` set to `https://github.com/Brendin10/freshprintsgrooming.git`
+  (repo created, Public).
+- Checked before committing: **no secrets in the repo.** The only key present is
+  the Supabase *publishable* key in `js/config.js`, which is safe to publish.
+
+**Still to do: the push.** It could not be done from the Claude session — that
+session's GitHub access is limited to pre-configured repositories, so it cannot
+reach this repo. Run this on the Windows machine, in this folder:
+
+```
+git push -u origin main
+```
+
+Git will open a browser to sign in to GitHub the first time. After that,
+README Step 4 (GitHub Pages) and Step 5 (point the domain) can go ahead.
+
 ## Open items
 
 - [ ] **Verify the test booking end to end** — sign in to `admin.html` and confirm the
@@ -89,8 +114,9 @@ booking and any early ones still price correctly in the dashboard.
 - [ ] **Three fake testimonials** still say "Placeholder Name" in `index.html`
       (~lines 359, 364, 369). Must be replaced or removed before going public.
 - [ ] **Delete the test booking** from Supabase once verification is done.
-- [ ] **README Step 1 — GitHub.** Not started. Repo not created; this folder is not
-      yet under version control.
+- [x] **README Step 1 — GitHub.** Repo created and the folder is under version
+      control with one clean commit. Only `git push -u origin main` is left —
+      see the Git section above.
 - [ ] **README Step 4 — GitHub Pages.** Not started.
 - [ ] **README Step 5 — point freshprintsgrooming.com at it.** Not started. Note the
       README's warning to delete any old DNS records pointing at Replit.
