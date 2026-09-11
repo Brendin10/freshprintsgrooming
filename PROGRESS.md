@@ -142,14 +142,36 @@ booking form's service dropdown and still priced from `FLAT_PRICE_SERVICES` in
 `js/config.js`, so the live estimate quotes them correctly — they just aren't
 advertised on the page any more.
 
+**Section order swapped — 11 September 2026**
+
+Page order is now: hero -> **About Renee** -> How it works -> **Services &
+pricing** -> Gallery -> Updates -> Reviews -> Book -> FAQ. Both sections
+carried `class="section"`, so swapping them left the background striping
+untouched. The desktop and mobile navs were reordered to match the page.
+
+**This makes the placeholder copy urgent.** About is now the first thing a
+visitor reads after the hero, and it still contains unfilled brackets:
+
+| Line | Placeholder |
+|---|---|
+| ~164 | `[I've been grooming dogs for X years]` |
+| ~171 | `[Dog 1]` and `[Dog 2]` — the two dogs in the photo |
+| ~197 | `[Your city]` |
+
+Plus the three fake testimonials at ~371, ~376 and ~381 still say
+"Placeholder Name". None of this can go public as-is.
+
 ## Open items
 
 - [ ] **Verify the test booking end to end** — sign in to `admin.html` and confirm the
       test row appears there, not just in the Supabase Table Editor. This is the real
       test of login + authenticated read + RLS.
 - [ ] **Confirm the ZIP** — 46574 was inferred for Walkerton, not supplied.
+- [ ] **Placeholder copy in the About section** — `[X years]`, `[Dog 1]`,
+      `[Dog 2]`, `[Your city]`. About is now the first section on the page, so
+      this is the most visible thing left to fix.
 - [ ] **Three fake testimonials** still say "Placeholder Name" in `index.html`
-      (~lines 359, 364, 369). Must be replaced or removed before going public.
+      (~lines 371, 376, 381). Must be replaced or removed before going public.
 - [ ] **Delete the test booking** from Supabase once verification is done.
 - [x] **README Step 1 — GitHub.** Repo created and the folder is under version
       control with one clean commit. Only `git push -u origin main` is left —
