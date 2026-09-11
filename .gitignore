@@ -1,0 +1,24 @@
+# ---- OS junk ----
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ---- Editors ----
+.vscode/
+.idea/
+*.swp
+*~
+
+# ---- Node (only used by the Facebook sync script in CI) ----
+node_modules/
+npm-debug.log*
+
+# ---- Secrets ----
+# Nothing in this project should ever hold a secret, but if you create a
+# local env file for testing the Facebook sync, it stays off GitHub.
+.env
+.env.*
+*.local
+
+# NOTE: data/feed.json and assets/feed/ ARE committed on purpose —
+# the sync-facebook workflow writes them back into the repo.

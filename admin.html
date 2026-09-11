@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Admin · Fresh Prints Grooming</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#101B2D">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bungee&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="css/admin.css">
+</head>
+<body class="admin-body">
+
+<!-- ============ BOOT / CONFIG WARNING ============ -->
+<div id="notConfigured" class="gate" hidden>
+  <div class="gate-card">
+    <h1 class="gate-title">Setup needed</h1>
+    <p>The admin dashboard isn't connected to a database yet.</p>
+    <p class="muted">Open <code>js/config.js</code> and add your Supabase URL and anon key, then follow the steps in <code>README.md</code>.</p>
+    <a class="btn btn-ghost btn-block" href="index.html">← Back to site</a>
+  </div>
+</div>
+
+<!-- ============ LOGIN ============ -->
+<div id="loginGate" class="gate" hidden>
+  <div class="gate-card">
+    <div class="gate-brand">
+      <span class="brand-name">Fresh Prints</span>
+      <span class="brand-sub">Staff access</span>
+    </div>
+
+    <form id="loginForm">
+      <div class="field">
+        <label for="loginEmail">Email</label>
+        <input type="email" id="loginEmail" autocomplete="username" inputmode="email" required>
+      </div>
+      <div class="field">
+        <label for="loginPassword">Password</label>
+        <input type="password" id="loginPassword" autocomplete="current-password" required>
+      </div>
+      <button type="submit" class="btn btn-primary btn-block btn-lg" id="loginBtn">
+        <span class="btn-label">Sign in</span>
+        <span class="spinner" hidden></span>
+      </button>
+      <div id="loginStatus" class="form-status" role="status" aria-live="polite"></div>
+    </form>
+
+    <a class="gate-back" href="index.html">← Back to site</a>
+  </div>
+</div>
+
+<!-- ============ DASHBOARD ============ -->
+<div id="dash" hidden>
+
+  <header class="admin-header">
+    <div class="admin-header-inner">
+      <div class="admin-brand">
+        <span class="brand-name">Fresh Prints</span>
+        <span class="admin-tag">Admin</span>
+      </div>
+      <div class="admin-header-right">
+        <button class="icon-btn" id="refreshBtn" title="Refresh" aria-label="Refresh">
+          <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+            <path d="M20 11a8 8 0 1 0-2.3 6.3"/><path d="M20 5v6h-6"/>
+          </svg>
+        </button>
+        <button class="icon-btn" id="logoutBtn" title="Sign out" aria-label="Sign out">
+          <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Stats -->
+  <div class="admin-wrap">
+    <div class="stats" id="stats">
+      <div class="stat"><span class="stat-num" id="statPending">–</span><span class="stat-label">Pending</span></div>
+      <div class="stat"><span class="stat-num" id="statToday">–</span><span class="stat-label">Today</span></div>
+      <div class="stat"><span class="stat-num" id="statWeek">–</span><span class="stat-label">This week</span></div>
+      <div class="stat"><span class="stat-num" id="statClients">–</span><span class="stat-label">Clients</span></div>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <nav class="tabs" role="tablist">
+    <button class="tab active" data-tab="requests" role="tab" aria-selected="true">
+      Requests <span class="pill" id="pendingPill" hidden>0</span>
+    </button>
+    <button class="tab" data-tab="calendar" role="tab" aria-selected="false">Calendar</button>
+    <button class="tab" data-tab="list" role="tab" aria-selected="false">All</button>
+    <button class="tab" data-tab="clients" role="tab" aria-selected="false">Clients</button>
+  </nav>
+
+  <main class="admin-wrap admin-main">
+
+    <!-- --- Requests --- -->
+    <section class="panel active" id="panel-requests">
+      <div id="requestsList" class="cardlist"></div>
+    </section>
+
+    <!-- --- Calendar --- -->
+    <section class="panel" id="panel-calendar">
+      <div class="cal-head">
+        <button class="icon-btn" id="prevMonth" aria-label="Previous month">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <h2 id="calTitle">—</h2>
+        <button class="icon-btn" id="nextMonth" aria-label="Next month">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
+      </div>
+
+      <div class="cal-dow"><span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span></div>
+      <div class="cal-grid" id="calGrid"></div>
+
+      <div class="cal-legend">
+        <span><i class="lg lg-pending"></i> Pending</span>
+        <span><i class="lg lg-confirmed"></i> Confirmed</span>
+        <span><i class="lg lg-completed"></i> Completed</span>
+      </div>
+
+      <div class="day-detail" id="dayDetail">
+        <h3 id="dayTitle">Select a day</h3>
+        <div id="dayList" class="cardlist"></div>
+      </div>
+    </section>
+
+    <!-- --- All appointments --- -->
+    <section class="panel" id="panel-list">
+      <div class="filters">
+        <input type="search" id="searchInput" placeholder="Search name, dog, phone, email…" aria-label="Search appointments">
+        <div class="filter-chips" id="statusFilter">
+          <button class="fchip active" data-status="all">All</button>
+          <button class="fchip" data-status="pending">Pending</button>
+          <button class="fchip" data-status="confirmed">Confirmed</button>
+          <button class="fchip" data-status="completed">Completed</button>
+          <button class="fchip" data-status="cancelled">Cancelled</button>
+        </div>
+      </div>
+      <div id="allList" class="cardlist"></div>
+    </section>
+
+    <!-- --- Clients --- -->
+    <section class="panel" id="panel-clients">
+      <input type="search" id="clientSearch" placeholder="Search clients…" aria-label="Search clients">
+      <p class="panel-note">
+        Client records are created automatically — each new booking either starts a
+        record or folds into an existing one.
+        <span id="clientCount" class="panel-note-count"></span>
+      </p>
+      <div id="clientsList" class="cardlist"></div>
+    </section>
+
+  </main>
+</div>
+
+<!-- ============ APPOINTMENT DRAWER ============ -->
+<div class="drawer-backdrop" id="drawerBackdrop" hidden></div>
+<aside class="drawer" id="drawer" hidden aria-label="Appointment details">
+  <div class="drawer-head">
+    <h2 id="drawerTitle">Appointment</h2>
+    <button class="icon-btn" id="drawerClose" aria-label="Close">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+  </div>
+  <div class="drawer-body" id="drawerBody"></div>
+</aside>
+
+<div class="toast" id="toast" hidden></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="js/config.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>
