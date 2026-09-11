@@ -277,11 +277,23 @@ hands off to Shopify's hosted checkout. Nothing touches Supabase or booking.
 **The store itself is not ready to sell yet.** Checked via the Shopify
 connector on 11 Sept:
 
-| Problem | Detail |
+| Problem | Status |
 |---|---|
-| Nothing is buyable | Both products: `availableForSale: false`, inventory tracked, quantity 0, policy DENY. The Buy Button will show "Sold out" with a disabled button. |
-| No images | `featuredMedia: null` on both — the grid renders empty image boxes. |
-| Store is unnamed | Shop name is still "My Store", which customers see at checkout. |
+| Nothing was buyable | **Fixed 11 Sept.** Both variants were `availableForSale: false` — inventory tracked, quantity 0, policy DENY. Both are now `inventoryPolicy: CONTINUE`, so they sell regardless of the counter, and both report `availableForSale: true`. Verified through the Storefront API, the same path the Buy Button uses. |
+| No images | **Still open.** `images: []` on both. Renee must upload product photos in Shopify; the grid shows blank image boxes until then. |
+| Store is unnamed | **Still open.** Shop name is "My Store", which customers see at checkout. There is no `shopUpdate` mutation in the Admin API — it can only be changed in Shopify → Settings → Store details. |
+
+**About the inventory fix:** `CONTINUE` means Shopify will keep selling these
+even when the counter says zero — it does not pretend stock exists. That was
+the right call for a salon that reorders on demand, and it avoids inventing
+stock numbers. If Renee would rather track real stock, set counts under
+Products → Inventory and switch the policy back to "don't sell when out of
+stock". Two clicks, reversible either way.
+
+**Worth checking before the first real order:** these products are marked as
+requiring shipping, so Shopify needs shipping rates configured (Settings →
+Shipping and delivery) or checkout will have nothing to offer. Local pickup is
+an option there too, which may suit a salon better.
 
 Products: Burt's Bees Hypoallergenic Shampoo ($12.99) and Burt's Bees Oatmeal
 Shampoo & Conditioner ($14.99). Plan is Basic, which includes the Buy Button.
@@ -291,8 +303,12 @@ Shampoo & Conditioner ($14.99). Plan is Basic, which includes the Buy Button.
 - [ ] **Verify the test booking end to end** — sign in to `admin.html` and confirm the
       test row appears there, not just in the Supabase Table Editor. This is the real
       test of login + authenticated read + RLS.
-- [ ] **Shopify store isn't sellable yet** — set stock (or allow overselling),
-      add product images, and rename the store from "My Store".
+- [ ] **Shopify: add product images.** Both products have none, so the shop
+      grid renders blank boxes. Only Renee can supply these.
+- [ ] **Shopify: rename the store** from "My Store" in Settings → Store details.
+      Customers see it at checkout. Not changeable via the API.
+- [ ] **Shopify: confirm shipping rates exist** (or enable local pickup),
+      otherwise checkout has nothing to offer for physical goods.
 - [ ] **Confirm the ZIP** — 46574 was inferred for Walkerton, not supplied.
       (Walkerton itself is now confirmed as the town, from the About copy.)
 - [x] **Placeholder copy in the About section** — filled in 11 Sept 2026:
