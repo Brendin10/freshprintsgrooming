@@ -614,6 +614,18 @@ button{ font:inherit; }
 .photo-remove:hover{ text-decoration:underline; }
 
 .form-note{ font-size:.83rem; color:#7A8798; text-align:center; margin:14px 0 0; }
+/* ---------- Shop (Shopify Buy Button) ----------
+   The SDK renders most of its own UI, much of it inside iframes
+   this stylesheet cannot reach — its look is configured in
+   js/shop.js instead. These rules only cover the wrapper. */
+#shopCollection{ min-height:80px; }
+.shop-status{
+  font-size:.92rem; line-height:1.6; color:#7A8798;
+  margin:14px 0 0; text-align:center;
+}
+.shop-status.warn{ color:#7A5A00; }
+.shop-status a{ font-weight:700; }
+
 /* ---------- Booking calendar ---------- */
 .bcal{
   border:1.5px solid var(--line); border-radius:var(--radius-sm);

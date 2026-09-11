@@ -257,11 +257,42 @@ One gotcha worth remembering: `admin.html` loads **both** `styles.css` and
 are therefore prefixed `bcal-` so they cannot leak into the admin calendar's
 `cal-` classes.
 
+**Shopify shop section — 11 September 2026**
+
+A **Shop** section sits between the Gallery and the Facebook feed, rendering the
+"Fresh Prints Collection" through Shopify's Buy Button SDK. Shopify owns the
+cart, checkout, payment, tax and shipping; the site only displays products and
+hands off to Shopify's hosted checkout. Nothing touches Supabase or booking.
+
+- `js/shop.js` (new) loads the SDK and styles the embed through its options —
+  brand magenta buttons, Outfit type — because the SDK renders much of its UI
+  inside iframes that `styles.css` cannot reach.
+- Store details live in `FP_CONFIG.SHOPIFY` in `js/config.js`. The storefront
+  token there is **public and read-only by design**, like `SUPABASE_ANON_KEY`.
+  An Admin API token is a different thing and must never enter this repo.
+- If the SDK is blocked (ad blocker, outage, strict network) the section shows a
+  message and a link to the Shopify store rather than a blank gap.
+- Nav, mobile nav and footer all link to it.
+
+**The store itself is not ready to sell yet.** Checked via the Shopify
+connector on 11 Sept:
+
+| Problem | Detail |
+|---|---|
+| Nothing is buyable | Both products: `availableForSale: false`, inventory tracked, quantity 0, policy DENY. The Buy Button will show "Sold out" with a disabled button. |
+| No images | `featuredMedia: null` on both — the grid renders empty image boxes. |
+| Store is unnamed | Shop name is still "My Store", which customers see at checkout. |
+
+Products: Burt's Bees Hypoallergenic Shampoo ($12.99) and Burt's Bees Oatmeal
+Shampoo & Conditioner ($14.99). Plan is Basic, which includes the Buy Button.
+
 ## Open items
 
 - [ ] **Verify the test booking end to end** — sign in to `admin.html` and confirm the
       test row appears there, not just in the Supabase Table Editor. This is the real
       test of login + authenticated read + RLS.
+- [ ] **Shopify store isn't sellable yet** — set stock (or allow overselling),
+      add product images, and rename the store from "My Store".
 - [ ] **Confirm the ZIP** — 46574 was inferred for Walkerton, not supplied.
       (Walkerton itself is now confirmed as the town, from the About copy.)
 - [x] **Placeholder copy in the About section** — filled in 11 Sept 2026:

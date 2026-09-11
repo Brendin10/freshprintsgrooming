@@ -25,6 +25,20 @@ window.FP_CONFIG = {
   // Earliest bookable date, in days from today (0 = today)
   MIN_LEAD_DAYS: 1,
 
+  /* --- Shopify storefront ---------------------------------
+     Powers the Shop section. These three values come from the
+     Buy Button channel's generated code and are all PUBLIC —
+     the storefront token is read-only and meant to sit in
+     client-side code, exactly like SUPABASE_ANON_KEY above.
+     An Admin API token is a different thing entirely and must
+     never appear in this project.
+     -------------------------------------------------------- */
+  SHOPIFY: {
+    DOMAIN:        'ydfxzw-1z.myshopify.com',
+    STOREFRONT_KEY: '267d6878e78789c4225476562b8a351e',
+    COLLECTION_ID:  '698068697169'
+  },
+
   /* --- Pricing by dog size -------------------------------
      This is the ONE place grooming prices live. Change a
      number here and it updates the Services section, the
