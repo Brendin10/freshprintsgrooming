@@ -298,6 +298,22 @@ an option there too, which may suit a salon better.
 Products: Burt's Bees Hypoallergenic Shampoo ($12.99) and Burt's Bees Oatmeal
 Shampoo & Conditioner ($14.99). Plan is Basic, which includes the Buy Button.
 
+**Shop teaser + trust strip fix — 11 September 2026**
+
+The Shop section sits three-quarters down the page, below the Gallery, so
+nothing above the fold pointed at it. A slim teaser band now sits directly
+under the hero's trust strip: "Looking for products at home?", one line of
+copy, and a **Shop products** button that scrolls to the Shop section.
+
+It uses the teal button, not the magenta one, so it doesn't compete with
+"Book now" — booking is still the page's primary action. 98px tall on desktop,
+stacked and centred on mobile.
+
+Also fixed while in there: **the trust strip was still advertising Bath &
+brush, De-shedding and Puppy's first groom** — all removed when the menu was
+cut to two services. It now reads: Full grooms, Jazz's Pawdicure, Nail trims,
+One dog at a time, No cage dryers, Senior-friendly.
+
 ## Open items
 
 - [ ] **Verify the test booking end to end** — sign in to `admin.html` and confirm the
