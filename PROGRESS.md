@@ -202,9 +202,10 @@ behind Fresh Prints. I opened this shop because...".
       test row appears there, not just in the Supabase Table Editor. This is the real
       test of login + authenticated read + RLS.
 - [ ] **Confirm the ZIP** — 46574 was inferred for Walkerton, not supplied.
-- [ ] **Placeholder copy in the About section** — `[Dog 1]`, `[Dog 2]` and
-      `[Your city]` are still unfilled. About is the first section on the page,
-      so this is the most visible thing left to fix.
+      (Walkerton itself is now confirmed as the town, from the About copy.)
+- [x] **Placeholder copy in the About section** — filled in 11 Sept 2026:
+      the dogs are **Luna** and **Pips**, the town is **Walkerton**. The photo's
+      alt text names them now too.
 - [ ] **Confirm what's in Jazz's Pawdicure** — the bullets on the card were
       written as a plausible guess, not supplied.
 - [ ] **Three fake testimonials** still say "Placeholder Name" in `index.html`
