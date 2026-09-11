@@ -356,6 +356,25 @@ button{ font:inherit; }
 }
 .card-link:hover{ text-decoration:underline; }
 
+/* ---------- Service panels (2-service layout) ---------- */
+/* The Full Fresh carries the size tiers inside it, so each service states
+   its own price exactly once, right next to itself. */
+.service-main{ margin-bottom:18px; }
+.service-main:hover,
+.service-mini:hover{ transform:none; }          /* too big to lift on hover */
+.service-main .packages-title{ margin:22px 0 14px; }
+.service-main .sizes{ margin-bottom:14px; }
+.service-main .sizes-note{ margin:0 0 20px; text-align:left; }
+.service-main .size-tier:hover{ transform:none; }
+
+.service-mini{ margin-bottom:18px; }
+.service-mini .price strong{ font-size:1.32rem; }
+
+/* Two-up tick lists inside the wider panels */
+@media (min-width:600px){
+  .ticks-2{ grid-template-columns:1fr 1fr; gap:9px 26px; }
+}
+
 /* ---------- Add-ons ----------
    The add-ons block was taken off the page on 11 September 2026 because
    listing every price there duplicated the size pricing above it. These

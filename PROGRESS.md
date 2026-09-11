@@ -161,15 +161,52 @@ visitor reads after the hero, and it still contains unfilled brackets:
 Plus the three fake testimonials at ~371, ~376 and ~381 still say
 "Placeholder Name". None of this can go public as-is.
 
+**Cut down to two services — 11 September 2026**
+
+The menu is now exactly:
+
+| Service | Price |
+|---|---|
+| The Full Fresh | by size — $40 / $50 / $60 |
+| Jazz's Pawdicure | flat $15, any size |
+
+Bath & Brush and the De-Shed Treatment were removed. (A "Bel-Air Blowout" was
+considered and dropped before it was built.)
+
+Because the two services price differently, the old "size tiers, then a row of
+packages" layout no longer worked — it implied every service cost $40-$60. The
+section now gives each service its own panel and states its price once, inside
+it: The Full Fresh carries the three size tiers, Jazz's Pawdicure shows a flat
+$15. The Full Fresh's bullet list absorbed the old Bath & Brush contents, which
+it used to reference by name.
+
+- `js/config.js` — `FLAT_PRICE_SERVICES` is now just `{ "Jazz's Pawdicure": 15 }`.
+  Nail trim only ($15) and Puppy intro session ($35) were removed along with
+  their dropdown options.
+- Booking dropdown is now The Full Fresh, Jazz's Pawdicure, "Not sure".
+- FAQ pricing and duration answers rewritten; the duration answer had been
+  quoting Bath & Brush timings.
+
+**Jazz's Pawdicure's bullet list is invented** — nail trim shaped and smoothed,
+paw pad trim, paw balm finish, quick paw rinse. Renee should confirm what's
+actually included and at $15 whether the balm belongs in it (it was a $10
+add-on on the old menu).
+
+Also removed: the `[I've been grooming dogs for X years]` placeholder in the
+About section, at the owner's request. The sentence now opens "I'm the hands
+behind Fresh Prints. I opened this shop because...".
+
 ## Open items
 
 - [ ] **Verify the test booking end to end** — sign in to `admin.html` and confirm the
       test row appears there, not just in the Supabase Table Editor. This is the real
       test of login + authenticated read + RLS.
 - [ ] **Confirm the ZIP** — 46574 was inferred for Walkerton, not supplied.
-- [ ] **Placeholder copy in the About section** — `[X years]`, `[Dog 1]`,
-      `[Dog 2]`, `[Your city]`. About is now the first section on the page, so
-      this is the most visible thing left to fix.
+- [ ] **Placeholder copy in the About section** — `[Dog 1]`, `[Dog 2]` and
+      `[Your city]` are still unfilled. About is the first section on the page,
+      so this is the most visible thing left to fix.
+- [ ] **Confirm what's in Jazz's Pawdicure** — the bullets on the card were
+      written as a plausible guess, not supplied.
 - [ ] **Three fake testimonials** still say "Placeholder Name" in `index.html`
       (~lines 371, 376, 381). Must be replaced or removed before going public.
 - [ ] **Delete the test booking** from Supabase once verification is done.

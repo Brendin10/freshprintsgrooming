@@ -46,8 +46,7 @@ window.FP_CONFIG = {
      size. Anything not listed here is priced by size above.
      Keys must match the <option> text in the booking form. */
   FLAT_PRICE_SERVICES: {
-    'Nail trim only':      15,
-    'Puppy intro session': 35
+    "Jazz's Pawdicure": 15
   }
 };
 
