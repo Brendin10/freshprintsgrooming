@@ -105,6 +105,22 @@ git push -u origin main
 Git will open a browser to sign in to GitHub the first time. After that,
 README Step 4 (GitHub Pages) and Step 5 (point the domain) can go ahead.
 
+**GitHub Pages + Facebook sync — 11 September 2026**
+
+- Pushed to `https://github.com/Brendin10/freshprintsgrooming` (Public).
+- `CNAME` renamed to `CNAME.disabled` so Pages serves at
+  `https://brendin10.github.io/freshprintsgrooming/` instead of claiming a
+  custom domain that does not point at GitHub yet. Every asset path in the
+  site is relative, so it runs unchanged from a subfolder.
+  **`RESTORE-CUSTOM-DOMAIN.md`** has the DNS records and the steps to switch
+  the domain over later.
+- The **Facebook sync workflow is paused**. Its `schedule:` block is commented
+  out in `.github/workflows/sync-facebook.yml`; `workflow_dispatch` is still
+  there, so it can be run by hand from the Actions tab. It failed on every run
+  without the `FB_PAGE_ID` / `FB_PAGE_TOKEN` secrets and emailed about it each
+  time. The site is unaffected — with no posts in `data/feed.json`, `js/feed.js`
+  leaves the "Fresh off the page" section hidden.
+
 ## Open items
 
 - [ ] **Verify the test booking end to end** — sign in to `admin.html` and confirm the
@@ -121,6 +137,8 @@ README Step 4 (GitHub Pages) and Step 5 (point the domain) can go ahead.
 - [ ] **README Step 5 — point freshprintsgrooming.com at it.** Not started. Note the
       README's warning to delete any old DNS records pointing at Replit.
 - [ ] **README Steps 6–8 — Facebook feed.** Optional, site works fine without it.
+      The workflow is paused until then — uncomment the `schedule:` lines in
+      `.github/workflows/sync-facebook.yml` once the two secrets are added.
 
 ## Ideas raised but not decided
 
