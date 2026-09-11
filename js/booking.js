@@ -82,8 +82,8 @@
 
     estimateNote.textContent = flat
       ? 'A flat price, whatever your dog weighs. Renee confirms it before she starts.'
-      : 'Covers the groom itself. Add-ons, heavy matting and dogs that need extra time ' +
-        'can add to it — Renee will tell you before she starts.';
+      : 'Heavily matted coats and dogs that need extra handling time can add to ' +
+        'this — Renee will tell you before she starts.';
 
     estimateBox.hidden = false;
   }

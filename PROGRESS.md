@@ -121,6 +121,27 @@ README Step 4 (GitHub Pages) and Step 5 (point the domain) can go ahead.
   time. The site is unaffected — with no posts in `data/feed.json`, `js/feed.js`
   leaves the "Fresh off the page" section hidden.
 
+**Services section simplified — 11 September 2026**
+
+The price was being stated three times over (the size tiers, a "$40–$60 by
+size" line on every package card, and a full add-ons price list), which read
+as three different pricing schemes instead of one.
+
+- The **add-ons block was removed** from `index.html`. Its CSS is still in
+  `css/styles.css` under a comment explaining why, so the section can be
+  dropped back in unchanged when Renee wants it — the markup is in git history.
+- The per-card price line is gone. The cards now describe **what's included**;
+  the size tiers above them are the only place a groom price appears.
+- Pricing and packages are now **one section** under "Services & pricing",
+  reading price first, then what that price gets you.
+- Copy that referred to add-ons was reworded in the FAQ, the booking form's
+  estimate note and `js/booking.js`.
+
+Note: "Nail trim only" ($15) and "Puppy intro session" ($35) are still in the
+booking form's service dropdown and still priced from `FLAT_PRICE_SERVICES` in
+`js/config.js`, so the live estimate quotes them correctly — they just aren't
+advertised on the page any more.
+
 ## Open items
 
 - [ ] **Verify the test booking end to end** — sign in to `admin.html` and confirm the

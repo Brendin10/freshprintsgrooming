@@ -356,7 +356,12 @@ button{ font:inherit; }
 }
 .card-link:hover{ text-decoration:underline; }
 
-/* ---------- Add-ons ---------- */
+/* ---------- Add-ons ----------
+   The add-ons block was taken off the page on 11 September 2026 because
+   listing every price there duplicated the size pricing above it. These
+   rules are kept so the section can be dropped back in unchanged; the
+   markup is in git history (commit before "Merge pricing and packages").
+   ------------------------------------------------------------------ */
 .addons{
   margin-top:36px; background:var(--white);
   border:1px solid var(--line); border-radius:var(--radius); padding:26px 22px;
