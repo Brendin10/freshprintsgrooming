@@ -271,6 +271,8 @@ button{ font:inherit; }
 .sizes{ display:grid; gap:14px; margin-bottom:18px; }
 .size-tier{
   position:relative;
+  display:block;                 /* they're <a> elements — links into the form */
+  color:inherit; text-decoration:none; cursor:pointer;
   background:var(--white);
   border:1.5px solid var(--line);
   border-radius:var(--radius);
@@ -279,6 +281,13 @@ button{ font:inherit; }
   box-shadow:var(--shadow-sm);
   transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease;
 }
+.size-tier::after{
+  content:"Pick this size →";
+  display:block; margin-top:12px;
+  font-size:.78rem; font-weight:700; color:var(--magenta);
+  opacity:0; transition:opacity .2s ease;
+}
+.size-tier:hover::after, .size-tier:focus-visible::after{ opacity:1; }
 .size-tier:hover{
   transform:translateY(-3px);
   border-color:var(--teal);
@@ -365,7 +374,7 @@ button{ font:inherit; }
 .service-main .packages-title{ margin:22px 0 14px; }
 .service-main .sizes{ margin-bottom:14px; }
 .service-main .sizes-note{ margin:0 0 20px; text-align:left; }
-.service-main .size-tier:hover{ transform:none; }
+/* the tiers stay interactive inside the panel — they prefill the booking form */
 
 .service-mini{ margin-bottom:18px; }
 .service-mini .price strong{ font-size:1.32rem; }
@@ -605,6 +614,15 @@ button{ font:inherit; }
 .photo-remove:hover{ text-decoration:underline; }
 
 .form-note{ font-size:.83rem; color:#7A8798; text-align:center; margin:14px 0 0; }
+/* prefill feedback: briefly highlight what a services link just set */
+@keyframes fpJustSet{
+  0%   { box-shadow:0 0 0 0 rgba(23,190,187,.55); }
+  35%  { box-shadow:0 0 0 5px rgba(23,190,187,.28); }
+  100% { box-shadow:0 0 0 0 rgba(23,190,187,0); }
+}
+.just-set{ animation:fpJustSet 1.5s ease-out; border-radius:var(--radius-sm); }
+@media (prefers-reduced-motion:reduce){ .just-set{ animation:none; } }
+
 /* live price estimate */
 .estimate{
   background:rgba(23,190,187,.08);

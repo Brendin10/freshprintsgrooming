@@ -196,6 +196,27 @@ Also removed: the `[I've been grooming dogs for X years]` placeholder in the
 About section, at the owner's request. The sentence now opens "I'm the hands
 behind Fresh Prints. I opened this shop because...".
 
+**Services links prefill the booking form — 11 September 2026**
+
+Clicking a size tier under The Full Fresh now sets the service *and* the size
+on the booking form, then jumps to it. The two "Book this" links set just the
+service.
+
+How it works: any element carrying `data-book-service` / `data-book-size` is
+picked up by a delegated click handler in `js/booking.js`, which sets the
+matching `<option>` and size radio, refreshes the live estimate, and briefly
+highlights what it changed (`.just-set`). The tiers are ordinary
+`<a href="#book">` anchors, so they are keyboard-reachable and still scroll to
+the form if the script never runs — the prefill is an enhancement, not a
+dependency.
+
+`data-book-service="The Full Fresh"` matches the option `The Full Fresh
+(full groom)` by prefix, so renaming the option's suffix won't break the link.
+If no option matches at all it warns in the console and still navigates.
+
+To wire up a new link, add the two data attributes to any `<a href="#book">`;
+no other change is needed.
+
 ## Open items
 
 - [ ] **Verify the test booking end to end** — sign in to `admin.html` and confirm the

@@ -92,6 +92,76 @@
   if (serviceSel) serviceSel.addEventListener('change', updateEstimate);
 
   /* =====================================================
+     Prefill links
+     Anything carrying data-book-service / data-book-size
+     (the size tiers and the "Book this" links in the
+     services section) fills the form in before the browser
+     follows its href to #book.
+     They are ordinary anchors, so they still jump to the
+     form if this script never runs.
+     ===================================================== */
+
+  /* Match an <option> even if its text carries a suffix,
+     so "The Full Fresh" still finds "The Full Fresh (full groom)". */
+  function findOption(select, wanted) {
+    var opts = select.options, i;
+    for (i = 0; i < opts.length; i++) if (opts[i].value === wanted) return opts[i];
+    for (i = 0; i < opts.length; i++) if (opts[i].value.indexOf(wanted) === 0) return opts[i];
+    return null;
+  }
+
+  function flash(el) {
+    if (!el) return;
+    el.classList.remove('just-set');
+    void el.offsetWidth;            // restart the animation if it's mid-flight
+    el.classList.add('just-set');
+    setTimeout(function () { el.classList.remove('just-set'); }, 1600);
+  }
+
+  document.addEventListener('click', function (e) {
+    if (!e.target || !e.target.closest) return;
+    var trigger = e.target.closest('[data-book-service], [data-book-size]');
+    if (!trigger) return;
+
+    var wantService = trigger.getAttribute('data-book-service');
+    var wantSize    = trigger.getAttribute('data-book-size');
+
+    if (wantService && serviceSel) {
+      var opt = findOption(serviceSel, wantService);
+      if (opt) {
+        serviceSel.value = opt.value;
+        flash(serviceSel);
+      } else {
+        // The option was renamed and this link wasn't updated with it.
+        console.warn('No booking option matches "' + wantService + '"');
+      }
+    }
+
+    if (wantSize && cfg.SIZES) {
+      var size = null, i;
+      for (i = 0; i < cfg.SIZES.length; i++) {
+        if (cfg.SIZES[i].id === wantSize) size = cfg.SIZES[i];
+      }
+      if (size) {
+        var wantValue = window.FP_SIZE_VALUE(size);
+        var radios = form.querySelectorAll('input[name="petSize"]');
+        for (i = 0; i < radios.length; i++) {
+          if (radios[i].value === wantValue) {
+            radios[i].checked = true;
+            radios[i].classList.remove('invalid');
+            flash(radios[i].nextElementSibling);   // the visible chip
+          }
+        }
+        var chipsEl = form.querySelector('.chips');
+        if (chipsEl) chipsEl.classList.remove('invalid');
+      }
+    }
+
+    updateEstimate();
+    // The href does the scrolling — nothing to preventDefault.
+  });
+
+  /* =====================================================
      Dog photo: pick → preview → downscale → upload
      ===================================================== */
   var MAX_UPLOAD_BYTES = 10 * 1024 * 1024;   // reject anything over 10 MB
