@@ -477,22 +477,61 @@
             </select>
           </div>
 
-          <div class="grid-2">
-            <div class="field">
-              <label for="preferredDate">Preferred date <span class="req">*</span></label>
-              <input type="date" id="preferredDate" name="preferredDate" required>
+          <div class="field">
+            <label id="calLabel">Pick a date <span class="req">*</span></label>
+            <p class="field-help">Green dates have times open. Grey dates are full or closed.</p>
+
+            <div class="bcal" id="cal" role="group" aria-labelledby="calLabel">
+              <div class="bcal-head">
+                <button type="button" class="bcal-nav" id="calPrev" aria-label="Previous month">&lsaquo;</button>
+                <p class="bcal-month" id="calMonth" aria-live="polite">&nbsp;</p>
+                <button type="button" class="bcal-nav" id="calNext" aria-label="Next month">&rsaquo;</button>
+              </div>
+
+              <div class="bcal-dow" aria-hidden="true">
+                <span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span>
+              </div>
+
+              <div class="bcal-grid" id="calGrid"></div>
+
+              <p class="bcal-legend">
+                <span class="bcal-key open"></span> times open
+                <span class="bcal-key full"></span> full or closed
+              </p>
             </div>
-            <div class="field">
-              <label for="preferredTime">Time of day <span class="req">*</span></label>
-              <select id="preferredTime" name="preferredTime" required>
-                <option value="">Select</option>
-                <option>Morning (8am–11am)</option>
-                <option>Midday (11am–2pm)</option>
-                <option>Afternoon (2pm–5pm)</option>
-                <option>Flexible</option>
-              </select>
+
+            <p class="bcal-status" id="calStatus" role="status" aria-live="polite"></p>
+
+            <!-- Shown only if availability can't be read, so a request can
+                 still be sent and confirmed by phone. -->
+            <div class="bcal-fallback" id="calFallback" hidden>
+              <div class="grid-2">
+                <div class="field">
+                  <label for="fallbackDate">Preferred date</label>
+                  <input type="date" id="fallbackDate">
+                </div>
+                <div class="field">
+                  <label for="fallbackTime">Time of day</label>
+                  <select id="fallbackTime">
+                    <option value="">Select</option>
+                    <option>Morning (8am&ndash;11am)</option>
+                    <option>Midday (11am&ndash;2pm)</option>
+                    <option>Afternoon (2pm&ndash;5pm)</option>
+                    <option>Flexible</option>
+                  </select>
+                </div>
+              </div>
             </div>
           </div>
+
+          <div class="slots-field" id="slotPicker" hidden>
+            <p class="slots-title" id="slotsTitle">Times on <span id="slotsDate"></span> <span class="req">*</span></p>
+            <div class="slot-list" id="slotList" role="group" aria-labelledby="slotsTitle"></div>
+          </div>
+
+          <input type="hidden" id="preferredDate" name="preferredDate">
+          <input type="hidden" id="preferredTime" name="preferredTime">
+          <input type="hidden" id="slotId" name="slotId">
 
           <div class="estimate" id="estimate" hidden>
             <div class="estimate-row">
@@ -624,6 +663,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="js/config.js"></script>
 <script src="js/main.js"></script>
+<script src="js/calendar.js"></script>
 <script src="js/booking.js"></script>
 <script src="js/feed.js"></script>
 </body>

@@ -95,6 +95,7 @@
       Requests <span class="pill" id="pendingPill" hidden>0</span>
     </button>
     <button class="tab" data-tab="calendar" role="tab" aria-selected="false">Calendar</button>
+    <button class="tab" data-tab="availability" role="tab" aria-selected="false">Availability</button>
     <button class="tab" data-tab="list" role="tab" aria-selected="false">All</button>
     <button class="tab" data-tab="clients" role="tab" aria-selected="false">Clients</button>
   </nav>
@@ -134,6 +135,100 @@
     </section>
 
     <!-- --- All appointments --- -->
+    <!-- --- Availability --- -->
+    <section class="panel" id="panel-availability">
+      <p class="panel-intro">
+        Times you add here are what customers can book. A date with no open times
+        shows on the booking form as unavailable.
+      </p>
+
+      <div class="av-layout">
+        <!-- Month picker -->
+        <div class="av-cal">
+          <div class="cal-head">
+            <button class="icon-btn" id="avPrev" aria-label="Previous month">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+            </button>
+            <h2 id="avTitle">&mdash;</h2>
+            <button class="icon-btn" id="avNext" aria-label="Next month">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+            </button>
+          </div>
+
+          <div class="cal-dow"><span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span></div>
+          <div class="cal-grid" id="avGrid"></div>
+
+          <div class="cal-legend">
+            <span><i class="lg lg-open"></i> Open</span>
+            <span><i class="lg lg-booked"></i> Booked</span>
+          </div>
+        </div>
+
+        <!-- One day's times -->
+        <div class="av-day" id="avDay">
+          <p class="av-empty" id="avEmpty">Pick a date to add times to it.</p>
+
+          <div id="avEditor" hidden>
+            <h3 id="avDayTitle">&mdash;</h3>
+
+            <div class="av-add">
+              <label for="avTime" class="av-label">Add a time</label>
+              <div class="av-add-row">
+                <input type="time" id="avTime" step="900">
+                <button class="btn btn-primary btn-sm" id="avAdd" type="button">Add</button>
+              </div>
+              <p class="av-hint">Times are on this date only.</p>
+            </div>
+
+            <div class="av-list" id="avList"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Weekly pattern -->
+      <div class="av-bulk">
+        <h3>Fill a repeating week</h3>
+        <p class="av-hint">
+          Adds the same times to every chosen weekday. Times that already exist are
+          left alone, so it is safe to run twice.
+        </p>
+
+        <div class="av-bulk-grid">
+          <div>
+            <span class="av-label">Days</span>
+            <div class="av-days" id="avDays">
+              <label class="av-daychip"><input type="checkbox" value="1"><span>Mon</span></label>
+              <label class="av-daychip"><input type="checkbox" value="2"><span>Tue</span></label>
+              <label class="av-daychip"><input type="checkbox" value="3"><span>Wed</span></label>
+              <label class="av-daychip"><input type="checkbox" value="4"><span>Thu</span></label>
+              <label class="av-daychip"><input type="checkbox" value="5"><span>Fri</span></label>
+              <label class="av-daychip"><input type="checkbox" value="6"><span>Sat</span></label>
+              <label class="av-daychip"><input type="checkbox" value="0"><span>Sun</span></label>
+            </div>
+          </div>
+
+          <div>
+            <label for="avBulkTimes" class="av-label">Times</label>
+            <input type="text" id="avBulkTimes" placeholder="9:00, 11:00, 13:00, 15:00">
+            <p class="av-hint">24-hour clock, separated by commas.</p>
+          </div>
+
+          <div>
+            <label for="avWeeks" class="av-label">For how long</label>
+            <select id="avWeeks">
+              <option value="2">The next 2 weeks</option>
+              <option value="4" selected>The next 4 weeks</option>
+              <option value="8">The next 8 weeks</option>
+              <option value="12">The next 12 weeks</option>
+            </select>
+          </div>
+        </div>
+
+        <button class="btn btn-primary" id="avBulkAdd" type="button">Add these times</button>
+        <p class="av-status" id="avBulkStatus" role="status" aria-live="polite"></p>
+      </div>
+    </section>
+
     <section class="panel" id="panel-list">
       <div class="filters">
         <input type="search" id="searchInput" placeholder="Search name, dog, phone, email…" aria-label="Search appointments">
@@ -179,5 +274,6 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="js/config.js"></script>
 <script src="js/admin.js"></script>
+<script src="js/availability.js"></script>
 </body>
 </html>

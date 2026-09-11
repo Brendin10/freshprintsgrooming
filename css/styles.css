@@ -614,6 +614,110 @@ button{ font:inherit; }
 .photo-remove:hover{ text-decoration:underline; }
 
 .form-note{ font-size:.83rem; color:#7A8798; text-align:center; margin:14px 0 0; }
+/* ---------- Booking calendar ---------- */
+.bcal{
+  border:1.5px solid var(--line); border-radius:var(--radius-sm);
+  background:var(--white); padding:14px 12px 12px;
+}
+.bcal.invalid{ border-color:var(--magenta); box-shadow:0 0 0 3px rgba(240,56,107,.12); }
+
+.bcal-head{ display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:10px; }
+.bcal-month{ margin:0; font-weight:700; color:var(--ink); font-size:1rem; }
+.bcal-nav{
+  width:34px; height:34px; flex:none; cursor:pointer;
+  border:1.5px solid var(--line); border-radius:9px; background:var(--white);
+  font-size:1.25rem; line-height:1; color:var(--ink-2);
+  transition:border-color .15s ease, color .15s ease;
+}
+.bcal-nav:hover:not(:disabled){ border-color:var(--teal); color:var(--teal-dk); }
+.bcal-nav:disabled{ opacity:.3; cursor:not-allowed; }
+
+.bcal-dow{
+  display:grid; grid-template-columns:repeat(7,1fr); gap:4px; margin-bottom:5px;
+}
+.bcal-dow span{
+  text-align:center; font-size:.7rem; font-weight:700; letter-spacing:.06em;
+  text-transform:uppercase; color:#8A96A6;
+}
+
+.bcal-grid{ display:grid; grid-template-columns:repeat(7,1fr); gap:4px; }
+.bcal-day{
+  position:relative; aspect-ratio:1/1; width:100%;
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1px;
+  border:1.5px solid transparent; border-radius:9px;
+  font-family:var(--sans); font-size:.9rem; font-weight:600;
+  background:var(--alt); color:var(--body);
+  transition:transform .12s ease, border-color .15s ease, background .15s ease;
+}
+.bcal-day.blank{ background:none; border:none; }
+
+/* A date with at least one open time */
+.bcal-day.is-open{
+  cursor:pointer;
+  background:rgba(23,190,187,.12);
+  border-color:rgba(23,190,187,.45);
+  color:#0B6D6B;
+}
+.bcal-day.is-open:hover{ transform:translateY(-2px); border-color:var(--teal); background:rgba(23,190,187,.2); }
+.bcal-day.is-open .bcal-count{
+  font-size:.62rem; font-weight:700; letter-spacing:.02em;
+  color:var(--teal-dk); opacity:.9;
+}
+
+/* Nothing free, or outside the booking window */
+.bcal-day.is-full{
+  cursor:not-allowed; opacity:.45;
+  background:rgba(240,56,107,.07);
+  border-color:rgba(240,56,107,.22);
+  color:#A8536E;
+  text-decoration:line-through;
+}
+
+.bcal-day.is-selected{
+  background:var(--teal); border-color:var(--teal-dk); color:#fff; opacity:1;
+}
+.bcal-day.is-selected .bcal-count{ color:#fff; }
+
+.bcal-legend{
+  display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:6px 16px;
+  margin:12px 0 0; font-size:.78rem; color:#7A8798;
+}
+.bcal-key{
+  display:inline-block; width:11px; height:11px; border-radius:3px;
+  vertical-align:-1px; margin-right:3px;
+}
+.bcal-key.open{ background:rgba(23,190,187,.3); border:1.5px solid var(--teal); }
+.bcal-key.full{ background:rgba(240,56,107,.12); border:1.5px solid rgba(240,56,107,.4); }
+
+.bcal-status{ font-size:.86rem; color:#7A8798; margin:9px 0 0; line-height:1.5; }
+.bcal-status.warn{ color:#7A5A00; }
+.bcal-fallback{ margin-top:14px; }
+
+/* ---------- Time slots ---------- */
+.slots-field{ margin-bottom:18px; }
+.slots-field.invalid .slot-list{
+  border-color:var(--magenta); box-shadow:0 0 0 3px rgba(240,56,107,.12);
+}
+.slots-title{
+  font-weight:600; font-size:.95rem; color:var(--ink); margin:0 0 9px;
+}
+.slot-list{
+  display:grid; grid-template-columns:repeat(auto-fill, minmax(104px, 1fr)); gap:8px;
+  border:1.5px solid transparent; border-radius:var(--radius-sm); padding:2px;
+}
+.slot{
+  padding:11px 8px; cursor:pointer;
+  border:1.5px solid var(--line); border-radius:var(--radius-sm);
+  background:var(--white); color:var(--ink-2);
+  font-family:var(--sans); font-size:.92rem; font-weight:600;
+  transition:all .15s ease;
+}
+.slot:hover{ border-color:var(--teal); background:rgba(23,190,187,.07); }
+.slot.is-selected{
+  border-color:var(--teal); background:rgba(23,190,187,.14); color:var(--ink);
+  box-shadow:inset 0 0 0 1px var(--teal);
+}
+
 /* prefill feedback: briefly highlight what a services link just set */
 @keyframes fpJustSet{
   0%   { box-shadow:0 0 0 0 rgba(23,190,187,.55); }

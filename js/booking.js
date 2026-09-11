@@ -15,22 +15,8 @@
   var spinner   = submitBtn.querySelector('.spinner');
   var cfg       = window.FP_CONFIG;
 
-  /* ---- Restrict the date picker to valid days ---- */
-  var dateInput = document.getElementById('preferredDate');
-  if (dateInput) {
-    var min = new Date();
-    min.setDate(min.getDate() + (cfg.MIN_LEAD_DAYS || 0));
-    var max = new Date();
-    max.setMonth(max.getMonth() + 6);
-    dateInput.min = toISODate(min);
-    dateInput.max = toISODate(max);
-  }
-
-  function toISODate(d) {
-    return d.getFullYear() + '-' +
-      String(d.getMonth() + 1).padStart(2, '0') + '-' +
-      String(d.getDate()).padStart(2, '0');
-  }
+  /* The date and time now come from the calendar (js/calendar.js),
+     which writes into these hidden fields. */
 
   /* =====================================================
      Dog size: the three price tiers
@@ -360,7 +346,7 @@
     var problems = [];
     var firstBad = null;
 
-    ['ownerName', 'phone', 'email', 'petName', 'service', 'preferredDate', 'preferredTime']
+    ['ownerName', 'phone', 'email', 'petName', 'service']
       .forEach(function (id) {
         var el = document.getElementById(id);
         if (!el) return;
@@ -373,6 +359,27 @@
           if (!firstBad) firstBad = el;
         }
       });
+
+    /* Date and time live in hidden inputs, so highlight the calendar and the
+       slot list rather than a field nobody can see. */
+    var calBox   = document.getElementById('cal');
+    var slotBox  = document.getElementById('slotPicker');
+    var dateVal  = document.getElementById('preferredDate').value;
+    var timeVal  = document.getElementById('preferredTime').value;
+
+    if (!dateVal) {
+      problems.push('preferredDate');
+      if (calBox && !calBox.hidden) {
+        calBox.classList.add('invalid');
+        if (!firstBad) firstBad = calBox;
+      }
+    } else if (!timeVal) {
+      problems.push('preferredTime');
+      if (slotBox && !slotBox.hidden) {
+        slotBox.classList.add('invalid');
+        if (!firstBad) firstBad = slotBox;
+      }
+    }
 
     var size = form.querySelector('input[name="petSize"]:checked');
     var chips = form.querySelector('.chips');
@@ -405,6 +412,7 @@
       service:        document.getElementById('service').value,
       preferred_date: document.getElementById('preferredDate').value,
       preferred_time: document.getElementById('preferredTime').value,
+      slot_id:        document.getElementById('slotId').value || null,
       notes:          document.getElementById('notes').value.trim() || null,
       status:         'pending'
     };
@@ -474,6 +482,20 @@
         setLoading(false);
         if (res.error) {
           console.error('Supabase insert failed:', res.error);
+
+          /* The database refuses a slot that stopped being open between
+             this page loading and the request arriving — someone else got
+             there first. Reload the calendar and let them pick again. */
+          var msg = String(res.error.message || '');
+          if (/just been booked/i.test(msg)) {
+            setStatus('warn',
+              '<strong>Sorry — that time was just taken.</strong><br>' +
+              'Somebody booked it while you were filling this in. ' +
+              'Your details are still here — please pick another time.');
+            if (window.FP_CALENDAR) window.FP_CALENDAR.reload();
+            return;
+          }
+
           setStatus('err',
             'Something went wrong on our end. Please call ' +
             '<a href="tel:' + cfg.BUSINESS_PHONE.replace(/\D/g, '') + '">' + cfg.BUSINESS_PHONE +
@@ -487,15 +509,19 @@
         form.reset();
         clearPhoto();
         if (estimateBox) estimateBox.hidden = true;
+        // That slot is gone now — redraw the calendar without it.
+        if (window.FP_CALENDAR) window.FP_CALENDAR.reload();
 
         var quoted = window.FP_PRICE(data.pet_size, data.service);
+        var when   = friendlyWhen(data.preferred_date, data.preferred_time);
 
         setStatus('ok',
           '<strong>Request received.</strong><br>' +
           'Thanks, ' + escapeHtml(data.owner_name.split(' ')[0]) + '. We\'ll confirm ' +
-          escapeHtml(data.pet_name) + '\'s appointment shortly' +
+          escapeHtml(data.pet_name) + '\'s appointment' +
+          (when ? ' for <strong>' + escapeHtml(when) + '</strong>' : '') +
           (quoted != null ? ' at <strong>$' + quoted + '</strong>' : '') +
-          '. Keep an eye on your email and phone.' +
+          ' shortly. Keep an eye on your email and phone.' +
           (photoFailed
             ? '<br><br><em>Your photo didn\'t upload, but the booking went through fine — ' +
               'you can text it over instead.</em>'
@@ -509,6 +535,28 @@
           '<a href="' + mailtoLink(data) + '">email your request</a> instead.');
       });
   });
+
+  /* '2026-09-15' + '14:00'  ->  'Tuesday, September 15 at 2:00 PM' */
+  function friendlyWhen(isoDate, hhmm) {
+    if (!isoDate) return '';
+    var p = isoDate.split('-');
+    var d = new Date(+p[0], +p[1] - 1, +p[2]);
+    if (isNaN(d)) return '';
+
+    var out = d.toLocaleDateString(undefined,
+      { weekday: 'long', month: 'long', day: 'numeric' });
+
+    if (/^\d{1,2}:\d{2}$/.test(hhmm || '')) {
+      var bits = hhmm.split(':');
+      var h = parseInt(bits[0], 10);
+      var ampm = h >= 12 ? 'PM' : 'AM';
+      var h12 = h % 12; if (h12 === 0) h12 = 12;
+      out += ' at ' + h12 + ':' + bits[1] + ' ' + ampm;
+    } else if (hhmm) {
+      out += ', ' + hhmm;
+    }
+    return out;
+  }
 
   function escapeHtml(s) {
     return String(s).replace(/[&<>"']/g, function (c) {

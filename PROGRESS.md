@@ -217,6 +217,46 @@ If no option matches at all it warns in the console and still navigates.
 To wire up a new link, add the two data attributes to any `<a href="#book">`;
 no other change is needed.
 
+**Availability + booking calendar — 11 September 2026**
+
+> **ACTION NEEDED: run `supabase/02-availability.sql`** in the Supabase SQL
+> Editor. Nothing below works until that is done — the booking form will show
+> its fallback date field and say the calendar can't be loaded.
+
+Renee sets the times; the booking form only offers those times.
+
+*Customer side* (`js/calendar.js`, new): the native date input is replaced by a
+month grid. A date with at least one open time is teal and clickable and shows
+how many times are free; a date with none is dimmed, struck through, red-tinted
+and disabled. Picking a date reveals that day's real times, replacing the old
+"Morning / Midday / Afternoon" guesswork. The chosen slot goes into hidden
+`preferredDate` / `preferredTime` / `slotId` fields, so `booking.js` reads the
+same field names it always did.
+
+*Admin side* (`js/availability.js`, new — **Availability** tab): click any date
+to add or remove times on it, and a "fill a repeating week" tool adds a set of
+times to chosen weekdays for up to 12 weeks. Booked times show as Booked and
+cannot be removed. The bulk add upserts with `ignoreDuplicates`, so running it
+twice is harmless.
+
+*Double-booking is prevented in the database, not the browser.* The public role
+cannot write to `slots` at all. Booking inserts an appointment carrying a
+`slot_id`, and a `SECURITY DEFINER` trigger claims the slot with
+`update ... where id = $1 and status = 'open'`. If two people race, the second
+matches no row, the trigger raises, and the whole insert rolls back — the form
+catches that, says the time was just taken, reloads the calendar and keeps
+their details. Cancelling or deleting an appointment puts its time back.
+
+*If availability can't be read* — migration not run, network down, Supabase
+misconfigured — the calendar hides itself and a plain date field plus the old
+time-of-day dropdown appear, so a request can still be sent and confirmed by
+phone. Verified for all three failure modes.
+
+One gotcha worth remembering: `admin.html` loads **both** `styles.css` and
+`admin.css`, and both pages have a calendar. The customer calendar's classes
+are therefore prefixed `bcal-` so they cannot leak into the admin calendar's
+`cal-` classes.
+
 ## Open items
 
 - [ ] **Verify the test booking end to end** — sign in to `admin.html` and confirm the
@@ -249,6 +289,10 @@ working, an automatic "your appointment is confirmed" email to the customer, and
 recurring appointments for regulars. None of these exist yet.
 
 ## Next session — start here
+
+0. **Run `supabase/02-availability.sql`**, then add some times under the
+   Availability tab. Until slots exist every date shows as unavailable, which
+   is correct behaviour, not a bug.
 
 1. Sign in to `admin.html` and confirm the test booking shows up, and that the
    "Standard" price and the pre-filled quote look right on it.
