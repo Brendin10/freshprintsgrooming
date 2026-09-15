@@ -363,6 +363,23 @@ Note: the report photo bucket is public, the same as the booking photos.
 Anyone who has a photo's exact URL can view it. The URLs are never shown on
 the public site.
 
+**Delete a client + centered profile — 15 September 2026**
+
+- Every client profile ends with a **Delete client** button. It removes all of
+  that client's appointments and post-groom reports, and it also deletes
+  their photos (booking and report photos). Deleting their appointments
+  reopens their booked times, through the existing delete trigger. A dialog
+  first shows how many appointments (including upcoming ones) and reports
+  will go, and nothing is deleted until you type **DELETE**. Reports are
+  deleted before appointments. If anything fails, the dashboard reloads to
+  show what's actually left. Photo removal is best effort: if it fails, the
+  client is still deleted and the photo just stays in storage.
+- On screens 700px and wider, a client profile now opens as a **centered
+  panel** instead of the right-hand drawer. An appointment or report opened
+  from a profile stays centered. Appointments opened from the other tabs still
+  use the side drawer, and phones still get the bottom sheet. The CSS is
+  `.drawer-center` in `css/admin.css`.
+
 ## Open items
 
 - [ ] **Run `supabase/03-groom-reports.sql`** so post-groom reports can be saved.

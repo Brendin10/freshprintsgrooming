@@ -556,3 +556,30 @@
 .gr-actions{ display:grid; gap:9px; margin-top:6px; }
 #grStatus:empty{ display:none; }
 #grStatus{ margin-bottom:12px; }
+
+/* ---------- Delete client ---------- */
+.cp-danger{
+  margin-top:26px; padding-top:18px; border-top:1px dashed var(--line);
+}
+.cp-danger .drawer-section-title{ color:var(--magenta); }
+.cp-danger p{ font-size:.88rem; color:var(--body); line-height:1.55; margin:0 0 12px; }
+
+/* ---------- Centered panel (client profiles) ---------- */
+@media (min-width:700px){
+  .drawer.drawer-center{
+    left:50%; top:50%; right:auto; bottom:auto;
+    width:min(720px, calc(100vw - 48px));
+    max-height:min(88dvh, 900px);
+    border-radius:20px;
+    transform:translate(-50%, -50%);
+    box-shadow:0 24px 80px rgba(16,27,45,.35);
+    animation:popIn .22s cubic-bezier(.2,.8,.3,1);
+  }
+  @keyframes popIn{
+    from{ opacity:0; transform:translate(-50%, -48%) scale(.97); }
+  }
+  .drawer-center .drawer-body{ padding:24px 28px 28px; }
+  .drawer-center .drawer-head{ padding:20px 28px 16px; }
+  .drawer-center .cp-dogs{ grid-template-columns:1fr 1fr; }
+  .drawer-center .gr-photos{ max-width:420px; }
+}

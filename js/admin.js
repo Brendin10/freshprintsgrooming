@@ -652,6 +652,10 @@
     el('drawer').setAttribute('aria-label', label);
     el('drawerBody').innerHTML = html;
     el('drawerBody').scrollTop = 0;
+    // Anything opened from a client profile shows as a centered panel;
+    // the rest of the dashboard keeps the side drawer.
+    el('drawer').classList.toggle('drawer-center',
+      !!(state.view && (state.view.type === 'client' || state.fromClient)));
     el('drawer').hidden = false;
     el('drawerBackdrop').hidden = false;
     document.body.style.overflow = 'hidden';
@@ -830,7 +834,83 @@
         : emptyState('None on file', 'Their appointments were deleted; the reports above were kept.')) +
       '</div>';
 
+    html += '<div class="cp-danger">' +
+      '<p class="drawer-section-title">Remove client</p>' +
+      '<p>Deletes ' + esc(firstName(c.name) || 'this client') + ' along with all of their appointments, ' +
+        'post-groom reports and photos. Any times they had booked open up again.</p>' +
+      '<button type="button" class="btn btn-danger btn-block" data-cp-delete="' + esc(key) + '">Delete client</button>' +
+    '</div>';
+
     showDrawer(c.name || 'Client', 'Client profile', html);
+  }
+
+  /* Delete a client = delete every appointment and report filed under
+     them, then tidy up their photos. Reports go first so nothing is left
+     half-linked if the second step fails. */
+  function deleteClient(key) {
+    var c = buildClients()[key];
+    if (!c) return;
+
+    var appts = state.appts.filter(function (a) { return clientKey(a) === key; });
+    var reps = reportsForClient(key);
+    var today = isoToday();
+    var upcoming = appts.filter(function (a) {
+      return a.preferred_date >= today && (a.status === 'pending' || a.status === 'confirmed');
+    }).length;
+
+    var typed = prompt(
+      'Delete ' + (c.name || 'this client') + ' and everything on file for them?\n\n' +
+      '• ' + appts.length + ' appointment' + (appts.length === 1 ? '' : 's') +
+        (upcoming ? ' (' + upcoming + ' still upcoming)' : '') + '\n' +
+      '• ' + reps.length + ' post-groom report' + (reps.length === 1 ? '' : 's') + '\n\n' +
+      'This cannot be undone. Type DELETE to confirm.', '');
+    if (typed === null) return;
+    if (typed.trim().toUpperCase() !== 'DELETE') {
+      toast('Nothing deleted. Type DELETE to confirm.', true);
+      return;
+    }
+
+    var apptIds = appts.map(function (a) { return a.id; });
+    var repIds = reps.map(function (r) { return r.id; });
+    var photos = [];
+    appts.forEach(function (a) { photos.push(a.photo_url); });
+    reps.forEach(function (r) { photos.push(r.before_photo_url, r.after_photo_url); });
+    photos = photos.map(storagePath).filter(Boolean);
+
+    var step1 = repIds.length
+      ? sb.from('groom_reports').delete().in('id', repIds)
+      : Promise.resolve({});
+
+    Promise.resolve(step1).then(function (res) {
+      if (res.error) throw res.error;
+      return apptIds.length
+        ? sb.from('appointments').delete().in('id', apptIds)
+        : {};
+    }).then(function (res) {
+      if (res.error) throw res.error;
+      state.appts = state.appts.filter(function (a) { return apptIds.indexOf(a.id) === -1; });
+      state.reports = state.reports.filter(function (r) { return repIds.indexOf(r.id) === -1; });
+      closeDrawer(true);
+      renderAll();
+      toast((c.name || 'Client') + ' deleted');
+
+      // Best effort: a leftover photo is harmless, so don't fail on it.
+      if (photos.length) {
+        sb.storage.from('dog-photos').remove(photos).then(function (r) {
+          if (r && r.error) console.warn('Some photos were not removed:', r.error);
+        });
+      }
+    }).catch(function (err) {
+      console.error(err);
+      toast('Could not delete: ' + ((err && err.message) || 'unknown error'), true);
+      loadAppointments();   // show whatever actually got removed
+    });
+  }
+
+  // Public URL -> path inside the dog-photos bucket.
+  function storagePath(url) {
+    var m = /\/dog-photos\/(.+)$/.exec(String(url || ''));
+    return m ? decodeURIComponent(m[1].split('?')[0]) : null;
   }
 
   /* =====================================================
@@ -1193,6 +1273,9 @@
   el('drawerBody').addEventListener('click', function (e) {
     var back = e.target.closest('[data-back-client]');
     if (back) { openClient(back.dataset.backClient); return; }
+
+    var del = e.target.closest('[data-cp-delete]');
+    if (del) { deleteClient(del.dataset.cpDelete); return; }
 
     var b = e.target.closest('[data-rep]');
     if (!b) return;
