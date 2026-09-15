@@ -432,3 +432,127 @@
 .av-status{ font-size:.88rem; margin:12px 0 0; line-height:1.5; }
 .av-status.ok{ color:#0B6D6B; }
 .av-status.err{ color:#A81E4B; }
+
+/* ---------- Client profile (drawer) ---------- */
+.client-top{ cursor:pointer; }
+.drawer-back{
+  display:inline-block; background:none; border:none; padding:0; margin:0 0 16px;
+  font-family:var(--sans); font-size:.88rem; font-weight:700; color:var(--magenta); cursor:pointer;
+}
+.drawer-back:hover{ text-decoration:underline; }
+.cp-head{ display:flex; align-items:center; gap:14px; margin-bottom:18px; }
+.cp-head .client-name{ font-size:1.1rem; }
+.cp-dogs{ list-style:none; margin:0 0 22px; padding:0; display:grid; gap:10px; }
+.cp-dogs li{ display:flex; align-items:center; gap:11px; font-size:.93rem; color:var(--ink); line-height:1.35; }
+.cp-dogs .muted{ color:#8A96A6; font-size:.84rem; }
+.cp-count{
+  display:inline-block; margin-left:6px; padding:1px 7px; border-radius:999px;
+  background:rgba(23,190,187,.14); color:var(--teal-dk); font-family:var(--sans); letter-spacing:0;
+}
+
+/* ---------- Post-groom reports ---------- */
+.gr-flag{
+  font-size:.7rem; font-weight:700; letter-spacing:.04em; text-transform:uppercase;
+  padding:2px 8px; border-radius:999px; align-self:center;
+}
+.gr-flag-done{ background:rgba(23,190,187,.14); color:#0B6D6B; }
+.gr-flag-todo{ background:rgba(255,193,69,.25); color:#7A5A00; }
+
+.gr-setup, .gr-prompt{
+  border-radius:var(--radius-sm); padding:14px 15px; margin-bottom:22px;
+  font-size:.9rem; line-height:1.55;
+}
+.gr-setup{ background:rgba(255,193,69,.16); color:#6A4E00; }
+.gr-setup code{ background:rgba(255,255,255,.7); padding:1px 5px; border-radius:4px; font-size:.86em; }
+.gr-prompt{ background:rgba(240,56,107,.06); border:1.5px dashed rgba(240,56,107,.35); }
+.gr-prompt p{ margin:0 0 12px; color:var(--ink-2); }
+.gr-none{ font-size:.9rem; color:#8A96A6; margin:0 0 22px; line-height:1.55; }
+
+.gr-list{ display:grid; gap:12px; margin-bottom:22px; }
+.gr-card{
+  background:var(--white); border:1px solid var(--line); border-left:4px solid var(--line);
+  border-radius:var(--radius-sm); padding:14px 15px; margin-bottom:22px;
+}
+.gr-list .gr-card{ margin-bottom:0; }
+.gr-m-great{ border-left-color:var(--teal); }
+.gr-m-good{ border-left-color:#7FD8D6; }
+.gr-m-okay{ border-left-color:var(--yellow); }
+.gr-m-tough{ border-left-color:var(--magenta); }
+
+.gr-card-head{ display:flex; justify-content:space-between; align-items:flex-start; gap:10px; margin-bottom:8px; }
+.gr-card-title{ font-weight:700; color:var(--ink); line-height:1.3; }
+.gr-card-title span{ display:block; font-weight:500; font-size:.84rem; color:var(--body); }
+.gr-mood{
+  flex:none; font-size:.68rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase;
+  padding:4px 9px; border-radius:999px; white-space:nowrap;
+}
+.gr-mood-great{ background:rgba(23,190,187,.16); color:#0B6D6B; }
+.gr-mood-good{ background:rgba(23,190,187,.09); color:#0B6D6B; }
+.gr-mood-okay{ background:rgba(255,193,69,.25); color:#7A5A00; }
+.gr-mood-tough{ background:rgba(240,56,107,.13); color:#A81E4B; }
+
+.gr-text{ margin:0 0 10px; font-size:.93rem; color:var(--ink-2); line-height:1.6; white-space:pre-wrap; word-break:break-word; }
+.gr-tags{ display:flex; flex-wrap:wrap; gap:5px; margin-bottom:10px; }
+.gr-tag{
+  font-size:.76rem; font-weight:600; color:var(--ink-2);
+  background:var(--alt); padding:3px 9px; border-radius:999px;
+}
+.gr-tag-health{ background:rgba(240,56,107,.1); color:#A81E4B; }
+
+.gr-facts{ margin:0 0 10px; display:grid; gap:7px; }
+.gr-facts div{ font-size:.88rem; line-height:1.5; }
+.gr-facts dt{ font-size:.7rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:#8A96A6; }
+.gr-facts dd{ margin:1px 0 0; color:var(--ink-2); white-space:pre-wrap; word-break:break-word; }
+
+.gr-photos{ display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:10px; }
+.gr-photos a{ position:relative; display:block; }
+.gr-photos img{ width:100%; aspect-ratio:1/1; object-fit:cover; border-radius:9px; background:var(--alt); display:block; }
+.gr-photos span{
+  position:absolute; left:6px; bottom:6px;
+  background:rgba(16,27,45,.72); color:#fff; font-size:.68rem; font-weight:700;
+  letter-spacing:.05em; text-transform:uppercase; padding:2px 7px; border-radius:6px;
+}
+
+.gr-card-foot{
+  display:flex; flex-wrap:wrap; align-items:center; gap:6px 14px;
+  padding-top:9px; border-top:1px dashed var(--line);
+}
+.gr-link{
+  background:none; border:none; padding:0; cursor:pointer;
+  font-family:var(--sans); font-size:.86rem; font-weight:700; color:var(--magenta);
+}
+.gr-link:hover{ text-decoration:underline; }
+.gr-muted{ font-size:.78rem; color:#8A96A6; }
+.gr-stamp{ margin-left:auto; }
+
+/* The form */
+.gr-form-sub{ margin:0 0 18px; font-size:.9rem; color:var(--body); }
+.gr-fs{ border:none; margin:0 0 20px; padding:0; min-width:0; }
+.gr-fs legend{
+  font-size:.9rem; font-weight:600; color:var(--ink-2); padding:0; margin-bottom:8px;
+}
+.gr-chips{ display:flex; flex-wrap:wrap; gap:6px; }
+.gr-chip{ position:relative; cursor:pointer; }
+.gr-chip input{ position:absolute; opacity:0; width:0; height:0; }
+.gr-chip span{
+  display:inline-block; padding:8px 12px;
+  border:1.5px solid var(--line); border-radius:10px;
+  font-size:.86rem; font-weight:600; color:var(--ink-2); line-height:1.25;
+  transition:all .15s ease;
+}
+.gr-chip input:checked + span{ border-color:var(--teal); background:rgba(23,190,187,.1); color:var(--ink); }
+.gr-chip input:focus-visible + span{ box-shadow:0 0 0 3px rgba(23,190,187,.25); }
+.gr-fs .gr-chips:has(.gr-chip-tall){ display:grid; grid-template-columns:repeat(4,1fr); }
+.gr-chip-tall span{ display:flex; flex-direction:column; align-items:center; text-align:center; padding:10px 4px; height:100%; }
+.gr-chip-tall em{ font-style:normal; font-size:.7rem; font-weight:500; color:var(--body); margin-top:2px; }
+
+.gr-photo-grid{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.gr-photo-field{ min-width:0; display:flex; flex-direction:column; gap:6px; }
+.gr-photo-label{ font-size:.76rem; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:#7A8798; }
+.gr-photo-now{ width:100%; aspect-ratio:1/1; object-fit:cover; border-radius:9px; background:var(--alt); }
+.gr-photo-field input[type="file"]{ font-family:inherit; font-size:.8rem; max-width:100%; color:var(--body); }
+.gr-remove{ font-size:.8rem; color:var(--magenta); display:flex; align-items:center; gap:5px; cursor:pointer; }
+
+.gr-actions{ display:grid; gap:9px; margin-top:6px; }
+#grStatus:empty{ display:none; }
+#grStatus{ margin-bottom:12px; }

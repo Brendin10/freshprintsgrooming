@@ -1,6 +1,6 @@
 # Fresh Prints Grooming — progress
 
-Last updated: 11 September 2026
+Last updated: 15 September 2026
 
 ## Done
 
@@ -314,7 +314,58 @@ brush, De-shedding and Puppy's first groom** — all removed when the menu was
 cut to two services. It now reads: Full grooms, Jazz's Pawdicure, Nail trims,
 One dog at a time, No cage dryers, Senior-friendly.
 
+**Post-groom reports + client profiles — 15 September 2026**
+
+> **ACTION NEEDED: run `supabase/03-groom-reports.sql`** in the Supabase SQL
+> Editor. Until then the dashboard works as before, and every report area
+> shows a note asking for this step.
+
+After a groom, Renee writes a short report, and it is saved to that client's
+profile in the Clients tab.
+
+*Writing one:* **Mark complete** now opens the report form straight away. A
+completed appointment without a report shows a **Needs report** tag on its
+card, and its drawer has a **Write post-groom report** button, so a skipped
+report can be written later. The form asks for:
+
+- how the visit went: Great / Good / Okay / Tough (the only required field)
+- a summary
+- behavior tags (Calm, Nervous, Dislikes the dryer…)
+- coat condition on arrival
+- health flags (Hot spots, Ear redness, Fleas or ticks, Lumps…) plus notes
+- recommendations for the owner
+- when the next groom is due (in 2 to 12 weeks)
+- before and after photos
+
+Reports can be edited or deleted. Leaving a form with unsaved changes asks
+for confirmation first.
+
+*Client profiles (new):* each client card has an **Open profile** button,
+and clicking the name also opens it. The profile shows contact details and
+stats, the client's dogs, **every post-groom report (newest first)**, and all
+of their appointments. An appointment opened from a profile has a link back
+to the profile.
+
+*Storage:* a new `groom_reports` table, with one report per appointment and
+staff-only RLS (the public site cannot read or write it). Each report also
+stores the owner, dog, date, service and client key. If the appointment is
+deleted, the report stays on the client's profile, marked "Appointment
+deleted — report kept". Photos go in the existing `dog-photos` bucket under
+`reports/<appointment id>/`. Large phone photos are shrunk before upload.
+
+Code: `js/admin.js` (sections "Client profile" and "Post-groom reports"),
+`css/admin.css` (`.cp-*` and `.gr-*`). Tested in a headless browser with a
+mocked database: writing, validating, editing, removing a photo, deleting the
+appointment, refreshing, phone layout, and the "table not created yet"
+fallback.
+
+Note: the report photo bucket is public, the same as the booking photos.
+Anyone who has a photo's exact URL can view it. The URLs are never shown on
+the public site.
+
 ## Open items
+
+- [ ] **Run `supabase/03-groom-reports.sql`** so post-groom reports can be saved.
 
 - [ ] **Verify the test booking end to end** — sign in to `admin.html` and confirm the
       test row appears there, not just in the Supabase Table Editor. This is the real
@@ -353,7 +404,7 @@ recurring appointments for regulars. None of these exist yet.
 
 ## Next session — start here
 
-0. **Run `supabase/02-availability.sql`**, then add some times under the
+0. **Run `supabase/02-availability.sql`, then `supabase/03-groom-reports.sql`**, then add some times under the
    Availability tab. Until slots exist every date shows as unavailable, which
    is correct behaviour, not a bug.
 
